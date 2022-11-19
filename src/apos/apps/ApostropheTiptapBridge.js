@@ -46,13 +46,13 @@ export default function() {
     // Install on next tick to avoid being fired for the original click that opened
     // the editor in some cases, such as in a pieces modal
     setImmediate(function() {
-      $('body').on('click', aposEditor.focusWatcher);
+      $('body').on('mousedown', aposEditor.focusWatcher);
     });
   });
 
   apos.on('tiptapStop', function(aposEditor) {
     aposEditor.focus = false;
     aposEditor.tiptapApp.stop();
-    $('body').off('click', aposEditor.focusWatcher);
+    $('body').off('mousedown', aposEditor.focusWatcher);
   });
 }
