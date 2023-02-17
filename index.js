@@ -154,6 +154,24 @@ module.exports = {
 
   construct: function(self, options) {
 
+    // adding context help links
+    // more docs and alternative implementation in apostrophe-widgets override
+    let superLoad = self.load;
+    self.load = async function (req, widgets, callback) {
+      const helpManager = self.apos.docs.getManager('help-link')
+      const helpItems = await helpManager.find(req, {title: widgets[0].type}, {title: 1, _id: 1, title: 1, _page: 1}).toArray();
+      var helpUrl = false
+      if(helpItems.length && helpItems[0]._page) {
+        helpUrl = helpItems[0]._page._url
+      }
+      widgets.forEach(widget => {
+        widget.helpUrl = helpUrl
+      })
+
+
+      return superLoad(req, widgets, callback)
+    };
+
     const superGetCreateSingletonOptions = self.getCreateSingletonOptions;
     self.getCreateSingletonOptions = function(req) {
       if (options.tiptap === false) {
@@ -181,6 +199,12 @@ module.exports = {
       // The default push-both behavior would be problematic here
       var pushing = fs.existsSync(self.apos.rootDir + '/lib/modules/apostrophe-rich-text-widgets/public/js/project-tiptap-bundle.js') ? 'project-tiptap-bundle' : 'tiptap-bundle';
       self.pushAsset('script', pushing, { when: 'user' });
+      if (self.apos.assets.options.lean) {
+        // Intentionally pushed only for the user scene, this player triggers
+        // the rich text editor on click when the classic player is
+        // not used due to lean assets
+        self.pushAsset('script', 'lean-user', { when: 'user' });
+      }
       superPushAssets();
     };
 

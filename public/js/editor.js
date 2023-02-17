@@ -1,3 +1,10 @@
+function stopOtherRtes(current) {
+    apos.tipTapRtes = apos.tipTapRtes || []
+    apos.tipTapRtes.forEach(function(rte){rte.stop()})
+    apos.tipTapRtes = []
+    apos.tipTapRtes.push(current)
+}
+
 apos.define('apostrophe-rich-text-widgets-editor', {
 
   afterConstruct: function(self) {
@@ -17,12 +24,13 @@ apos.define('apostrophe-rich-text-widgets-editor', {
     }
 
     // Start contextual editing (on click for instance)
-
     self.start = function() {
-      apos.utils.log('Starting!');
-      if (self.started || options.readOnly) {
-        return;
-      }
+        stopOtherRtes(self)
+
+        apos.utils.log('Starting!');
+        if (self.started || options.readOnly) {
+            return;
+        }
 
       self.$richText = self.$widget.find('[data-rich-text]:first');
 
@@ -33,9 +41,10 @@ apos.define('apostrophe-rich-text-widgets-editor', {
 
       // Bulk of the work happens in the Bridge Vue app
 
-      apos.emit('tiptapStart', self, {
-        content: self.$richText.html()
-      });
+            // fix for vanishing line breaks on editor activation
+            apos.emit('tiptapStart', self, {
+                content: self.$richText.html().replaceAll('<p></p>', '<p>&nbsp;</p>')
+            });
 
       // TODO self.focus updates
 
@@ -50,19 +59,19 @@ apos.define('apostrophe-rich-text-widgets-editor', {
     // End contextual editing (on blur for instance)
 
     self.stop = function() {
-      apos.emit('tiptapStop', self);
-      self.$richText = self.$widget.find('[data-rich-text]:first');
-      if (!self.$richText.length) {
-        // When we add a second widget this is called again and the data-rich-text of the first one added
-        // in this page editing session is mysteriously missing, just restore it
-        self.$widget.append($('<div data-rich-text="" class="apos-rich-text"></div>'));
+        apos.emit('tiptapStop', self);
         self.$richText = self.$widget.find('[data-rich-text]:first');
-      }
-      self.$richText.html(self.tiptapApp.value.content);
-      self.$richText.data('aposRichTextState', undefined);
-      self.$widget.trigger('aposRichTextStopped');
-      self.started = false;
-      self.setActive(false);
+        if (!self.$richText.length) {
+            // When we add a second widget this is called again and the data-rich-text of the first one added
+            // in this page editing session is mysteriously missing, just restore it
+            self.$widget.append($('<div data-rich-text="" class="apos-rich-text"></div>'));
+            self.$richText = self.$widget.find('[data-rich-text]:first');
+        }
+        self.$richText.html(self.tiptapApp.value.content.replaceAll('<p></p>', '<p>&nbsp;</p>'));
+        self.$richText.data('aposRichTextState', undefined);
+        self.$widget.trigger('aposRichTextStopped');
+        self.started = false;
+        self.setActive(false)
     };
 
   }
