@@ -1,6 +1,6 @@
 <template>
   <div class="apostrophe-tiptap-link-control">
-    <button @click="click()" class="apos-tiptap-menubar__button" :class="{ 'apos-tiptap-menubar__button--active': active() }">
+    <button @click.prevent="click()" class="apos-tiptap-menubar__button" :class="{ 'apos-tiptap-menubar__button--active': active() }">
       <Link :title="tool.label" :size="18" />
     </button>
     <ApostropheWindow v-if="editing">
