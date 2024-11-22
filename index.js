@@ -84,6 +84,16 @@ module.exports = {
           label: 'Code Block',
           icon: 'CodeBraces'
         },
+        superscript: {
+          component: 'ApostropheTiptapButton',
+          label: 'Superscript',
+          icon: 'FormatSuperscript'
+        },
+        subscript: {
+          component: 'ApostropheTiptapButton',
+          label: 'Subscript',
+          icon: 'FormatSubscript'
+        },
         undo: {
           component: 'ApostropheTiptapButton',
           label: 'Undo',

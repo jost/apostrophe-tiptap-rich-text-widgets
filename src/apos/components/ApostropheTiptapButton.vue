@@ -13,6 +13,8 @@
 
 import FormatBold from 'vue-material-design-icons/FormatBold.vue'
 import FormatItalic from 'vue-material-design-icons/FormatItalic.vue'
+import FormatSuperscript from 'vue-material-design-icons/FormatSuperscript.vue'
+import FormatSubscript from 'vue-material-design-icons/FormatSubscript.vue'
 import WindowMinimize from 'vue-material-design-icons/WindowMinimize.vue'
 import Link from 'vue-material-design-icons/Link.vue'
 import FormatListBulleted from 'vue-material-design-icons/FormatListBulleted.vue'
@@ -31,9 +33,11 @@ export default {
     editor: Object,
     tool: Object
   },
-  components: { 
+  components: {
     FormatBold,
     FormatItalic,
+    FormatSuperscript,
+    FormatSubscript,
     WindowMinimize,
     Link,
     FormatListBulleted,
@@ -43,7 +47,7 @@ export default {
     CodeBraces,
     Undo,
     Redo,
-    Table 
+    Table
   },
   methods: {
     command() {
