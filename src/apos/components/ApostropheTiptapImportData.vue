@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { read, utils } from 'xlsx';
+import { read, utils } from 'sheetjs-ce-unofficial';
 import FileUpload from 'vue-material-design-icons/FileUpload.vue';
 import ApostropheModal from './ApostropheModal.vue';
 
